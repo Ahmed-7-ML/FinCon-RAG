@@ -1,5 +1,5 @@
 from src.ingestion.run_ingestion import run_ingestion_pipeline
-from src.generation.chain import FinConRAGPipeline
+from src.generation.chains import FinConRAGPipeline
 import streamlit as st
 import sys
 from pathlib import Path
