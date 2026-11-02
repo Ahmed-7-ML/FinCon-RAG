@@ -8,6 +8,7 @@ dependencies = [
     "chromadb>=1.5.9",
     "datasets>=5.1.0",
     "dotenv>=0.9.9",
+    "dvc>=3.67.1",
     "elasticsearch>=9.5.1",
     "fastapi>=0.141.1",
     "huggingface-hub>=1.33.0",
