@@ -1,11 +1,14 @@
-from src.ingestion.run_ingestion import run_ingestion_pipeline
-from src.generation.chains import FinConRAGPipeline
 import streamlit as st
 import sys
 from pathlib import Path
 
 # Add project root to sys.path
+# ROOT_DIR = Path(__file__).parent.parent
+# sys.path.insert(0, str(ROOT_DIR))
 sys.path.append(str(Path(__file__).resolve().parent.parent))
+
+from src.ingestion.run_ingestion import run_ingestion_pipeline
+from src.generation.chains import FinConRAGPipeline
 
 st.set_page_config(
     page_title="FinCon & Regulatory RAG Assistant",
