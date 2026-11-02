@@ -44,9 +44,10 @@ Thumbs.db
 # Large Index & Vector Databases (>100MB generated during ingestion)
 data/processed/financial_corpus_processed.csv
 data/processed/financial_corpus_processed.json
-data/raw/baai_finance_economics_raw_75k.csv
+# data/raw/baai_finance_economics_raw_75k.csv
 # DVC tracked data
 chroma_db/
 data/parent_docstore.json
 data/bm25_index.pkl
 *.pkl
+service-account.json
