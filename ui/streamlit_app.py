@@ -1,6 +1,12 @@
 import streamlit as st
 import sys
 from pathlib import Path
+import os
+from huggingface_hub import login
+
+hf_token = os.getenv("HUGGINGFACE_TOKEN")
+if hf_token:
+    login(token=hf_token)
 
 # Add project root to sys.path
 # ROOT_DIR = Path(__file__).parent.parent
