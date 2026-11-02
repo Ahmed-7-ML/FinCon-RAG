@@ -42,9 +42,11 @@ ENV/
 Thumbs.db
 
 # Large Index & Vector Databases (>100MB generated during ingestion)
-chroma_db/
-data/bm25_index.pkl
-data/parent_docstore.json
 data/processed/financial_corpus_processed.csv
 data/processed/financial_corpus_processed.json
 data/raw/baai_finance_economics_raw_75k.csv
+# DVC tracked data
+chroma_db/
+data/parent_docstore.json
+data/bm25_index.pkl
+*.pkl
