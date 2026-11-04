@@ -2,11 +2,27 @@ import streamlit as st
 import sys
 from pathlib import Path
 import os
+
+# Load Streamlit Cloud secrets as env vars (fallback for local .env)
+try:
+    for key in ["GROQ_API_KEY", "GROQ_MODEL", "GROQ_TEMPERATURE", "GROQ_MAX_TOKENS",
+                "HUGGINGFACE_TOKEN", "EMBEDDING_MODEL_NAME", "RERANKER_MODEL_NAME",
+                "ELASTICSEARCH_API_KEY", "ELASTICSEARCH_URL", "ELASTICSEARCH_INDEX",
+                "USE_ELASTICSEARCH"]:
+        if key in st.secrets and not os.getenv(key):
+            os.environ[key] = str(st.secrets[key])
+except Exception:
+    # st.secrets not available outside Streamlit Cloud / local .env handles it
+    pass
+
 from huggingface_hub import login
 
 hf_token = os.getenv("HUGGINGFACE_TOKEN")
 if hf_token:
-    login(token=hf_token)
+    try:
+        login(token=hf_token)
+    except Exception:
+        pass
 
 # Add project root to sys.path
 # ROOT_DIR = Path(__file__).parent.parent
@@ -50,12 +66,11 @@ sample_queries = [
 
 selected_sample = st.sidebar.selectbox("Choose a 2026 sample query:", [""] + sample_queries)
 
-# Initialize pipeline
+# Lazily initialize pipeline (cached) — NOT called at import time to avoid
+# blocking Streamlit Cloud's startup health check while models load.
 @st.cache_resource
 def get_pipeline():
     return FinConRAGPipeline()
-
-pipeline = get_pipeline()
 
 # Main query input
 user_query = st.text_input("Enter your Financial Controlling / Accounting Question:", value=selected_sample if selected_sample else "")
@@ -64,6 +79,11 @@ if st.button("🔍 Search & Analyze", type="primary"):
     if not user_query.strip():
         st.warning("Please enter a query.")
     else:
+        try:
+            pipeline = get_pipeline()
+        except Exception as e:
+            st.error(f"Failed to initialize RAG pipeline: {e}")
+            st.stop()
         with st.spinner("Executing Hybrid Retrieval, Reranking & Synthesis..."):
             result = pipeline.run(query=user_query, top_k_rerank=top_k)
 
